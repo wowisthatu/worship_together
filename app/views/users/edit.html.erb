@@ -1,1 +1,9 @@
 <h1>Edit profile</h1>
+
+<%= render partial: 'errors' %>
+
+<%= form_for @user do |form| %>
+    <%= render partial: 'fields', locals: { f: form } %>
+
+<%= form.submit 'Update user profile' %>
+<% end %>

@@ -1,0 +1,8 @@
+<li>
+  <ul>
+    <li>Church: <%= Church.find(service.church_id).name %></li>
+    <li>Time: <%= service.start_time %> to <%= service.finish_time %></li>
+    <li>Day of the week: <%= service.day_of_week %></li>
+    <li>Meeting location: <%= service.location %>
+  </ul>
+</li>

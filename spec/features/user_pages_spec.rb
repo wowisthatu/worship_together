@@ -4,32 +4,32 @@ describe "User Pages" do
     subject { page }
 
     describe "show users" do
-	describe "individually" do
-	    let (:user) { FactoryGirl.create(:user) }
+      describe "individually" do
+          let (:user) { FactoryGirl.create(:user) }
 
-	    before { visit user_path(user) }
+          before { visit user_path(user) }
 
-	    it { should have_content(user.name) }
-	    it { should have_content(user.email) }
-	    it { should_not have_content(user.password) }
-	end
+          it { should have_content(user.name) }
+          it { should have_content(user.email) }
+          it { should_not have_content(user.password) }
+      end
 
-	describe "non-existant", type: :request do
-	    before { get user_path(-1) }
+      describe "non-existant", type: :request do
+          before { get user_path(-1) }
 
-	    specify { expect(response).to redirect_to(users_path) }
+          specify { expect(response).to redirect_to(users_path) }
 
-	    describe "follow redirect" do
-		before { visit user_path(-1) }
+          describe "follow redirect" do
+        before { visit user_path(-1) }
 
-		it { should have_alert(:danger, text: "Unable") }
-	    end
+        it { should have_alert(:danger, text: "Unable") }
+      end
 	end
 
 	describe "all" do
 	    before do
-		25.times { |i| FactoryGirl.create(:user) }
-		visit users_path
+        25.times { |i| FactoryGirl.create(:user) }
+        visit users_path
 	    end
 
 	    it { should have_content('List of users') }
@@ -55,35 +55,35 @@ describe "User Pages" do
 
 	describe "with invalid information" do
 	    it "does not add the user to the system" do
-		expect { click_button submit }.not_to change(User, :count)
-	    end
+		    expect { click_button submit }.not_to change(User, :count)
+	end
 
 	    it "produces an error message" do
-		click_button submit
-		should have_alert(:danger)
+        click_button submit
+        should have_alert(:danger)
 	    end
 	end
 
 	describe "with valid information" do
 	    before do
-		fill_in 'Username', with: 'John Doe'
-		fill_in 'Email', with: 'john.doe@example.com'
-		fill_in 'Password', with: 'password'
-		fill_in 'Confirmation', with: 'password'
+        fill_in 'Username', with: 'John Doe'
+        fill_in 'Email', with: 'john.doe@example.com'
+        fill_in 'Password', with: 'password'
+        fill_in 'Confirmation', with: 'password'
 	    end
 
 	    it "allows the user to fill in the fields" do
-		click_button submit
+		    click_button submit
 	    end
 
 	    it "does add the user to the system" do
-		expect { click_button submit }.to change(User, :count).by(1)
+		    expect { click_button submit }.to change(User, :count).by(1)
 	    end
 
 	    describe "produces a welcome message" do
-		before { click_button submit }
+        before { click_button submit }
 
-		it { should have_alert(:success, text: 'Welcome') }
+        it { should have_alert(:success, text: 'Welcome') }
 	    end
 
 	    describe "redirects to profile page", type: :request do
@@ -102,31 +102,31 @@ describe "User Pages" do
     end
 
     describe "editing users" do
-	let (:user) { FactoryGirl.create(:user) }
-	let!(:original_name) { user.name }
-	let (:submit) { 'Update user profile' }
+      let (:user) { FactoryGirl.create(:user) }
+      let!(:original_name) { user.name }
+      let (:submit) { 'Update user profile' }
 
-	before do
-	    login user
-	    visit edit_user_path(user)
-	end
+      before do
+          login user
+          visit edit_user_path(user)
+      end
 
-	it { should have_field('Username', with: user.name) }
-	it { should have_field('Email', with: user.email) }
-	it { should have_field('Password') }
+      it { should have_field('Username', with: user.name) }
+      it { should have_field('Email', with: user.email) }
+      it { should have_field('Password') }
 
 	describe "with invalid information" do
 	    before do
-		fill_in 'Username', with: ''
-		fill_in 'Email', with: ''
-		fill_in 'Password', with: ''
+        fill_in 'Username', with: ''
+        fill_in 'Email', with: ''
+        fill_in 'Password', with: ''
 	    end
 
 	    describe "does not change data" do
-		before { click_button submit }
+        before { click_button submit }
 
-		specify { expect(user.reload.name).not_to eq('') }
-		specify { expect(user.reload.name).to eq(original_name) }
+        specify { expect(user.reload.name).not_to eq('') }
+        specify { expect(user.reload.name).to eq(original_name) }
 	    end
 
 	    it "does not add a new user to the system" do
